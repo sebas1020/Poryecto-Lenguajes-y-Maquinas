@@ -1,0 +1,86 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = true;
+  IGNORE_CASE = false;}PARSER_BEGIN(parserP1)package uniandes.teolen.parserJavaCC.parserP1;
+
+import java.util.*;
+
+public class parserP1{
+  public ArrayList<String> nombreVariables = new ArrayList<String>();
+
+  public ArrayList<String> nombreFunciones = new ArrayList<String>();
+  }PARSER_END(parserP1)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERADORES ARIMETICOS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >
+| < MODULO: "%">}
+
+TOKEN: /* OPERADORES BOOLEANOS */
+{
+    < IGUAL : "==">
+|   < MENOR : "<">
+|   < MAYOR: ">">
+|   <MENORIGUAL : "<=">
+|   < MAYORIGUAL: ">=">
+|   < DIFERENTE : "!=">
+|   <NEGACION: "not">
+|   <AND : "and">
+|   <OR : "or">
+}
+
+TOKEN: /* SIMBOLOS OTROS DEL LENGUAJE*/
+{
+  < DPARENT: "(" >
+| < IPARENT: ")">
+| < DOSPUNTOS: ":">
+| < DCORCH: "[">
+| < ICORCH: "]">
+| < COMA: ",">}
+TOKEN :{  < INT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >
+| < #MAY: ["A"-"Z"] >
+| < #MIN: ["a"-"z"] >
+| < DEFINE : "define">
+| < PVAR: "var">
+| < VAR : ((<MAY>)|(< MIN >))+(<INT>)*>
+| <FUNCION: ((<MAY>)|(<MIN>))+>
+| <PARAMETRO: ((<VAR><COMA>)*<VAR>)*>
+| < ASIGNAR: "=">
+| <IF: "if" >
+| <PRINT: "print">}int one_line() :{}{  sum() ";"  {    return 0;  }| ";"  {    return 1;  }}
+
+void variable():
+{}
+{
+  <PVAR><VAR><ASIGNAR>expresionAri() // Toca revisar que la variable que se declara no ha sido declarada antes}
+
+void funcion():
+{}
+{
+  <DEFINE><FUNCION><DPARENT><PARAMETRO><IPARENT><DOSPUNTOS> // Toca revisar que la funcion que se declara no ha sido delcarada antes
+  ( expresionAri()|funcionif()) 
+}
+void expresionAri(): //expresión arimetica 
+{}
+{
+ <INT>
+ |<VAR> //Toca revisar que la variable que se asigne en la expresión arimetica exsite 
+ |<FUNCION>
+ |expresionAri()<PLUS>expresionAri()
+ |expresionAri()<MULTIPLY>expresionAri()
+ |expresionAri()<DIVIDE>expresionAri()
+ |expresionAri()<MINUS>expresionAri()
+ |expresionAri()<MODULO>expresionAri() }
+
+void expresionCond() : // expresión condicional{}{ expresionAri()(<IGUAL>|<MENOR>|<MAYOR>|<MENORIGUAL>|<MAYORIGUAL>|<DIFERENTE>)expresionAri()
+| <NEGACION>expresionCond()
+| expresionCond()<AND>expresionCond()
+| expresionCond()<OR>expresionCond()
+}
+void funcionif(): // funcion especial if
+{}
+{
+<IF><DPARENT>expresionCond()<COMA>expresionAri()<COMA>expresionAri()<IPARENT>
+  
+}
+
+void print(): // funcion de terminación print
+{}
+{
+ <PRINT><DPARENT>expresionAri()<IPARENT> }
