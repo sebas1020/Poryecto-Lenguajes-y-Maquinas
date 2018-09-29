@@ -9,7 +9,7 @@ public class parserP1{
   public ArrayList<String> nombreVariables = new ArrayList<String>();
 
   public ArrayList<String> nombreFunciones = new ArrayList<String>();
-  }PARSER_END(parserP1)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERADORES ARIMETICOS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >
+  }PARSER_END(parserP1)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN: /* OPERADORES ARIMETICOS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >
 | < MODULO: "%">}
 
 TOKEN: /* OPERADORES BOOLEANOS */
@@ -45,17 +45,26 @@ TOKEN: /* SIMBOLOS OTROS DEL LENGUAJE*/
 | <IF: "if" >
 | <PRINT: "print">}int one_line() :{}{  sum() ";"  {    return 0;  }| ";"  {    return 1;  }}
 
+//definicion de las funciones y variables
+
 void variable():
 {}
 {
-  <PVAR><VAR><ASIGNAR>expresionAri() // Toca revisar que la variable que se declara no ha sido declarada antes}
+	
+  <PVAR><VAR><ASIGNAR>
+	if(!existeVariable) { 
+  	expresionAri() // Toca revisar que la variable que se declara no ha sido declarada antes	}
+}
 
 void funcion():
 {}
 {
   <DEFINE><FUNCION><DPARENT><PARAMETRO><IPARENT><DOSPUNTOS> // Toca revisar que la funcion que se declara no ha sido delcarada antes
-  ( expresionAri()|funcionif()) 
+	if (!existeFuncion) { 
+  	( expresionAri()|funcionif()) 
 }
+}
+//asignacion de las funciones y variables
 void expresionAri(): //expresión arimetica 
 {}
 {
@@ -67,7 +76,6 @@ void funcion():
  |expresionAri()<DIVIDE>expresionAri()
  |expresionAri()<MINUS>expresionAri()
  |expresionAri()<MODULO>expresionAri() }
-
 void expresionCond() : // expresión condicional{}{ expresionAri()(<IGUAL>|<MENOR>|<MAYOR>|<MENORIGUAL>|<MAYORIGUAL>|<DIFERENTE>)expresionAri()
 | <NEGACION>expresionCond()
 | expresionCond()<AND>expresionCond()
@@ -83,4 +91,29 @@ void funcionif(): // funcion especial if
 void print(): // funcion de terminación print
 {}
 {
- <PRINT><DPARENT>expresionAri()<IPARENT> }
+ <PRINT><DPARENT>expresionAri()<IPARENT> }void existeVar():
+{token v;}
+{  ( v = <VAR>)	
+  for(int i =0; i < nombresVariables.size(); i++)
+  {
+	if(nombresVariables.get(i).equals( v.image;)) { 
+		return true;
+	}  
+    
+  }
+  return false;
+}
+
+void existeFun();
+{token f;}
+{
+  ( f = <FUNCION>)
+  for(int i =0; i < nombresFunciones.size(); i++)
+  {
+	if(nombresVariables.get(i).equals(f.image)) { 
+		return true;
+	}  
+    
+  }
+  return false;
+}
