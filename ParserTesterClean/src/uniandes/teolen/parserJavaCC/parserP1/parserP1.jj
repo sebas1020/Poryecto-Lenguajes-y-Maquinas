@@ -43,11 +43,13 @@ TOKEN: /* SIMBOLOS OTROS DEL LENGUAJE*/
 | <PARAMETRO: ((<VAR><COMA>)*<VAR>)*>
 | < ASIGNAR: "=">
 | <IF: "if" >
-| <PRINT: "print">}int one_line() :{}{  sum() ";"  {    return 0;  }| ";"  {    return 1;  }}
+| <PRINT: "print">}int one_line() :{}{
+  variable()|funcion()
+}
 
 //definicion de las funciones y variables
 
-void variable():
+void variable() throws Exception:
 {}
 {
 	
@@ -56,7 +58,7 @@ void variable():
   	expresionAri() // Toca revisar que la variable que se declara no ha sido declarada antes	}
 }
 
-void funcion():
+void funcion() throws Exception:
 {}
 {
   <DEFINE><FUNCION><DPARENT><PARAMETRO><IPARENT><DOSPUNTOS> // Toca revisar que la funcion que se declara no ha sido delcarada antes
@@ -84,8 +86,7 @@ void funcion():
 void funcionif(): // funcion especial if
 {}
 {
-<IF><DPARENT>expresionCond()<COMA>expresionAri()<COMA>expresionAri()<IPARENT>
-  
+<IF><DPARENT>expresionCond()<COMA>expresionAri()<COMA>expresionAri()<IPARENT> 
 }
 
 void print(): // funcion de terminación print
@@ -93,27 +94,37 @@ void print(): // funcion de terminación print
 {
  <PRINT><DPARENT>expresionAri()<IPARENT> }void existeVar():
 {token v;}
-{  ( v = <VAR>)	
+{  ( v = <VAR>)
+  Boolean x = false;
   for(int i =0; i < nombresVariables.size(); i++)
   {
 	if(nombresVariables.get(i).equals( v.image;)) { 
-		return true;
+		x = true;
 	}  
     
   }
-  return false;
+
+	if (x)
+	{
+	throw new Error("esta Variable ya existe" );
+	}
 }
 
-void existeFun();
+void existeFun() throws Exception;
 {token f;}
 {
   ( f = <FUNCION>)
+  Boolean x = false;
   for(int i =0; i < nombresFunciones.size(); i++)
   {
 	if(nombresVariables.get(i).equals(f.image)) { 
-		return true;
+		x = true;
 	}  
     
   }
-  return false;
+
+	if(x)
+	{
+		throw new Error("esta funcion ya existe" );
+	}
 }

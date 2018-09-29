@@ -17,10 +17,7 @@ public class parserP1 implements parserP1Constants {
       jj_consume_token(26);
     {if (true) return 0;}
       break;
-      jj_consume_token(26);
-    {if (true) return 1;}
-      break;
-    default:
+      default:
       jj_la1[0] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();

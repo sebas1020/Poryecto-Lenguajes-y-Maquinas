@@ -8,6 +8,7 @@ import uniandes.teolen.parserJavaCC.newParser.NuevoParser;
 import uniandes.teolen.parserJavaCC.parserCAML.ParserCAMLco;
 import uniandes.teolen.parserJavaCC.parserProlog.ParserProlog;
 import uniandes.teolen.parserJavaCC.parserGrammars.ParserG;
+import uniandes.teolen.parserJavaCC.parserP1.parserP1;
 import uniandes.teolen.parserJavaCC.newParserPost.NuevoParserPost;
 
 
@@ -31,6 +32,7 @@ public class MundoParsers {
 	    parsers.add("Parser Prolog");
 	    parsers.add("Parser G");
 	    parsers.add("Nuevo Parser POST");
+	    parsers.add("ParserP1");
 	    
 	    currentParser =  0;
 
@@ -62,7 +64,9 @@ public class MundoParsers {
 		return new ParserG(System.in);
 	}
 	
-	
+	public parserP1 getP1Parser() {
+		return new parserP1(System.in);
+	}
 	
 	public String getStringCurrentParser(){
 		return parsers.get(currentParser);
@@ -177,6 +181,20 @@ public class MundoParsers {
 		    	 resp = new String ("Error Lexico: "+e.getMessage());
 		     }
 		}
+		else if(parsers.get(currentParser).equals("ParserP1")){
+			parserP1 parser = getP1Parser();
+			parser.ReInit(new java.io.StringReader(texto));
+			try {
+				parser.one_line();
+			}
+			catch (Exception e)
+			{
+				resp = new String( "Error de Sintaxis: "+ e.getMessage());
+			}
+		}
+		
+		
+		
 		return "\n SISTEMA " + parsers.get(currentParser) + ": " + resp + "\n";
 	}
 
