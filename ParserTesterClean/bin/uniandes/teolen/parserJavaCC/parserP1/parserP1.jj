@@ -56,6 +56,10 @@ void variable() throws Exception:
   <PVAR><VAR><ASIGNAR>
 	if(!existeVariable) { 
   	expresionAri() // Toca revisar que la variable que se declara no ha sido declarada antes	}
+	else
+	{
+		throw new Error("esta variable ya existe" );
+	}
 }
 
 void funcion() throws Exception:
@@ -63,15 +67,24 @@ void funcion() throws Exception:
 {
   <DEFINE><FUNCION><DPARENT><PARAMETRO><IPARENT><DOSPUNTOS> // Toca revisar que la funcion que se declara no ha sido delcarada antes
 	if (!existeFuncion) { 
-  	( expresionAri()|funcionif()) 
-}
+  	( expresionAri()|funcionif())
+  	}
+  	else
+	{
+		throw new Error("esta funcion ya existe" );
+	}
 }
 //asignacion de las funciones y variables
-void expresionAri(): //expresión arimetica 
+void expresionAri() throws Exception: //expresión arimetica 
 {}
 {
  <INT>
  |<VAR> //Toca revisar que la variable que se asigne en la expresión arimetica exsite 
+	if(!existeVariable)
+	{
+		throw new Error("la variable no existe");
+	}
+
  |<FUNCION>
  |expresionAri()<PLUS>expresionAri()
  |expresionAri()<MULTIPLY>expresionAri()
@@ -100,17 +113,12 @@ void print(): // funcion de terminación print
   {
 	if(nombresVariables.get(i).equals( v.image;)) { 
 		x = true;
-	}  
-    
+	}   
   }
-
-	if (x)
-	{
-	throw new Error("esta Variable ya existe" );
-	}
+  return x;
 }
 
-void existeFun() throws Exception;
+void existeFun();
 {token f;}
 {
   ( f = <FUNCION>)
@@ -122,9 +130,5 @@ void existeFun() throws Exception;
 	}  
     
   }
-
-	if(x)
-	{
-		throw new Error("esta funcion ya existe" );
-	}
+	return x;
 }
